@@ -4,8 +4,7 @@ import { Personality } from "./personality";
 import { Prompt } from "./prompt";
 import { Tool } from "./tool";
 
-export interface AssistantFullInfo {
-  assistant: Assistant;
+export interface AssistantFullInfo extends Assistant {
   personality: Personality;
   content: Prompt[];
   tool: Tool[];

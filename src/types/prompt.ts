@@ -1,5 +1,5 @@
 export interface Prompt {
-  name: string;
-  category: string;
-  message: string;
+  Name: string;
+  Category: string;
+  Message: string;
 }
