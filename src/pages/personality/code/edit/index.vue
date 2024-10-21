@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import CharactersForm from "../../../../components/character-form/index.vue";
+import CharactersForm from "../../../../components/personality-form/index.vue";
 import { Personality } from "../../../../types/personality";
 
 const handleSubmit = (personality: Personality) => {
