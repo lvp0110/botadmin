@@ -1,39 +1,42 @@
 <template>
   <form @submit="submit">
     <label class="label">
+      <span>Код</span>
+      <input v-model="code" :bind="codeAttributes" />
+      <span>{{ errors.code }}</span>
+    </label>
+    <label class="label">
       <span>Название</span>
       <input v-model="name" :bind="nameAttributes" />
       <span>{{ errors.name }}</span>
     </label>
-    <label class="label">
-      <span>{{ AttributeTypeNames.lexis }}</span>
-      <select v-model="lexis" :bind="lexisAttributes">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-      </select>
-    </label>
-    <Field name="grammar.Name" as="select">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </Field>
+    <div v-for="(field, index) in fields" :key="field.key">
+      <label class="label">
+        <span>{{ field.value.type.name }}</span>
+        <PropSelect
+          :name="`props[${index}].data`"
+          :options="propItemsOptions[field.value.type.type]"
+        />
+      </label>
+    </div>
     <button type="submit">Сохранить</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
-import { AttributeTypeNames } from "../../types/attributes";
+import { defineProps, watch } from "vue";
 import { Personality } from "../../types/personality";
-import { useForm, Field } from "vee-validate";
+import { useForm, useFieldArray } from "vee-validate";
+import { PropItem } from "../../types/props";
+import PropSelect from "./prop-select/index.vue";
 
-const { initialValues, onSubmit } = defineProps<{
+const { initialValues, propItemsOptions, onSubmit } = defineProps<{
   initialValues?: Personality;
+  propItemsOptions: Record<string, PropItem[]>;
   onSubmit: (personality: Personality) => void;
 }>();
 
-const { defineField, errors, handleSubmit } = useForm({
+const { defineField, errors, values, handleSubmit } = useForm({
   initialValues,
   validationSchema: {
     name: (value: string = "") =>
@@ -41,8 +44,14 @@ const { defineField, errors, handleSubmit } = useForm({
   },
 });
 
+watch(values, (values) => {
+  console.log(values);
+});
+
+const [code, codeAttributes] = defineField("code");
 const [name, nameAttributes] = defineField("name");
-const [lexis, lexisAttributes] = defineField("lexis.Name");
+
+const { fields } = useFieldArray<Personality["props"][number]>("props");
 
 const submit = handleSubmit((values) => {
   onSubmit(values);

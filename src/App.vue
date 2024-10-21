@@ -24,13 +24,13 @@
         <li>
           <RouterLink
             class="btn btn-primary"
-            to="/characters"
+            to="/personality"
             @click.native="handleBlur"
           >
             Характеры
           </RouterLink>
         </li>
-        <li>
+        <!-- <li>
           <RouterLink
             class="btn btn-primary"
             to="/attributes"
@@ -38,15 +38,14 @@
           >
             Атрибуты
           </RouterLink>
-        </li>
+        </li> -->
       </ul>
     </div>
-    {{ props }}
-    <br />
-    <br />
-    {{ prop }}
     <RouterView></RouterView>
   </template>
+  <div v-else>
+    Error...
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -68,21 +67,22 @@ onMounted(async () => {
 
     if (response.ok) {
       const json = await response.json();
-      props.value = json.data.map(({ prop_type }) => prop_type);
+      // props.value = json.data.map(({ prop_type }) => prop_type);
       loadingStatus.value = LoadingStatus.Resolved;
 
-      const response2 = await fetch(
-        `http://localhost:3007/admin/personality/props/lexis`
-      );
-      const json2 = await response2.json();
-      prop.value = json2.data;
+      // const response2 = await fetch(
+      //   `http://localhost:3007/admin/personality/props/lexis`
+      // );
+      // const json2 = await response2.json();
+      // prop.value = json2.data;
 
       
     } else {
-      loadingStatus.value = LoadingStatus.Rejected;
+      // loadingStatus.value = LoadingStatus.Rejected;
+      loadingStatus.value = LoadingStatus.Resolved;
     }
   } catch {
-    loadingStatus.value = LoadingStatus.Rejected;
+    loadingStatus.value = LoadingStatus.Resolved;
   }
 });
 

@@ -9,10 +9,10 @@ import AssistantsPage from "./pages/assistants/index.vue";
 import AssistantsNewPage from "./pages/assistants/new/index.vue";
 import AssistantsCodePage from "./pages/assistants/code/index.vue";
 import AssistantsCodeEditPage from "./pages/assistants/code/edit/index.vue";
-import AttrributesPage from "./pages/attributes/index.vue";
-import AttrributesTypePage from "./pages/attributes/type/index.vue";
-import AttrributesTypeNewPage from "./pages/attributes/type/new/index.vue";
-import AttrributesTypeCodePage from "./pages/attributes/type/code/index.vue";
+import AttributesPage from "./pages/attributes/index.vue";
+import AttributesTypePage from "./pages/attributes/type/index.vue";
+import AttributesTypeNewPage from "./pages/attributes/type/new/index.vue";
+import AttributesTypeCodePage from "./pages/attributes/type/code/index.vue";
 import PersonalityPage from './pages/personality/index.vue'
 import PersonalityNewPage from './pages/personality/new/index.vue'
 import PersonalityCodePage from './pages/personality/code/index.vue'
@@ -43,15 +43,15 @@ const router = createRouter({
     {
       path: "/attributes",
       children: [
-        { path: "", component: AttrributesPage },
+        { path: "", component: AttributesPage },
         {
           path: ":type",
           children: [
-            { path: "", component: AttrributesTypePage },
-            { path: "new", component: AttrributesTypeNewPage },
+            { path: "", component: AttributesTypePage },
+            { path: "new", component: AttributesTypeNewPage },
             {
               path: ":code",
-              component: AttrributesTypeCodePage,
+              component: AttributesTypeCodePage,
             },
           ],
         },
