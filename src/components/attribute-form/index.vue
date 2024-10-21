@@ -1,27 +1,37 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <input name="name" v-model="attributeName" />
+  <form @submit="submit">
+    <label>
+      <span>Название:</span>
+      <input v-model="name" :bind="nameAttributes" />
+      <span>{{ errors.name }}</span>
+    </label>
     <button type="submit">Сохранить</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
+import { defineProps } from "vue";
+import { useForm } from "vee-validate";
+import { Attribute } from "../../types/attributes";
 
-const { initialName, onSubmit } = defineProps<{
-  initialName: string;
-  onSubmit: (formData: FormData) => void;
+const { initialValues, onSubmit } = defineProps<{
+  initialValues?: Attribute;
+  onSubmit: (attribute: Attribute) => void;
 }>();
 
-const attributeName = ref(initialName);
+const { defineField, errors, handleSubmit } = useForm({
+  initialValues,
+  validationSchema: {
+    name: (value: string = "") =>
+      value.length > 0 ? true : "Обязательное поле",
+  },
+});
 
-const handleSubmit = (event: Event) => {
-  if (event.target instanceof HTMLFormElement) {
-    const formData = new FormData(event.target);
+const [name, nameAttributes] = defineField("name");
 
-    onSubmit(formData);
-  }
-};
+const submit = handleSubmit((values) => {
+  onSubmit(values);
+});
 </script>
 
 <style scoped></style>

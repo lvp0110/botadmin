@@ -1,20 +1,19 @@
 <template>
-  <AttributeForm initial-name="Test name" :on-submit="onSubmit" />
+  <AttributeForm :initial-values="{ code: '123', name: 'test' }" :on-submit="onSubmit" />
 </template>
 
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
-import AttributeForm from '../../../../components/attribute-form/index.vue'
+import AttributeForm from "../../../../components/attribute-form/index.vue";
+import { Attribute } from "../../../../types/attributes";
 
 const router = useRouter();
 const route = useRoute();
 
-const onSubmit = (formData: FormData) => {
-    const name = formData.get("name");
+const onSubmit = (attribute: Attribute) => {
+  console.log(attribute);
 
-    console.log(name);
-    
-    router.push(`/attributes/${route.params.type}`);
+  router.push(`/attributes/${route.params.type}`);
 };
 </script>
 

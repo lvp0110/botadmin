@@ -1,18 +1,24 @@
 // @ts-expect-error
 import Vue, { createApp } from "@vue/compat";
-import "./style.css";
 import App from "./App.vue";
 import { BootstrapVue } from "bootstrap-vue";
+import { createWebHistory, createRouter } from "vue-router";
+
 import IndexPage from "./pages/index.vue";
 import AssistantsPage from "./pages/assistants/index.vue";
 import AssistantsNewPage from "./pages/assistants/new/index.vue";
 import AssistantsCodePage from "./pages/assistants/code/index.vue";
-import { createWebHistory, createRouter } from "vue-router";
+import AssistantsCodeEditPage from "./pages/assistants/code/edit/index.vue";
 import AttrributesPage from "./pages/attributes/index.vue";
 import AttrributesTypePage from "./pages/attributes/type/index.vue";
 import AttrributesTypeNewPage from "./pages/attributes/type/new/index.vue";
 import AttrributesTypeCodePage from "./pages/attributes/type/code/index.vue";
+import PersonalityPage from './pages/personality/index.vue'
+import PersonalityNewPage from './pages/personality/new/index.vue'
+import PersonalityCodePage from './pages/personality/code/index.vue'
+import PersonalityCodeEditPage from './pages/personality/code/edit/index.vue'
 
+import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
@@ -29,7 +35,7 @@ const router = createRouter({
           path: ":code",
           children: [
             { path: "", component: AssistantsCodePage },
-            { path: "edit", component: AssistantsNewPage },
+            { path: "edit", component: AssistantsCodeEditPage },
           ],
         },
       ],
@@ -37,7 +43,7 @@ const router = createRouter({
     {
       path: "/attributes",
       children: [
-        { path: '', component: AttrributesPage },
+        { path: "", component: AttrributesPage },
         {
           path: ":type",
           children: [
@@ -51,11 +57,28 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/personality",
+      children: [
+        { path: "", component: PersonalityPage },
+        { path: "new", component: PersonalityNewPage },
+        {
+          path: ":code",
+          children: [
+            {
+              path: '',
+              component: PersonalityCodePage,
+            },
+            {
+              path: 'edit',
+              component: PersonalityCodeEditPage,
+            }
+          ]
+        },
+      ],
+    },
   ],
 });
-
-// attributes
-// characters
 
 Vue.use(BootstrapVue);
 

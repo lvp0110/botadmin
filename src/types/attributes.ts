@@ -2,8 +2,8 @@ export type AttributeCode = string;
 
 export enum AttributeType {
   Lexis = "lexis",
-  Styles = "styles",
-  Tones = "tones",
+  Styles = "style",
+  Tones = "tone",
   Grammar = "grammar",
 }
 
@@ -18,3 +18,5 @@ export interface Attribute {
   code: AttributeCode;
   name: string;
 }
+
+

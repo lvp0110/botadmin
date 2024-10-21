@@ -1,46 +1,96 @@
 <template>
-  <div class="menu" style="margin: 20px">
-    <input type="checkbox" id="burger-checkbox" class="burger-checkbox" />
-    <label for="burger-checkbox" class="burger"></label>
-    <ul class="menu-list">
-      <li v-for="assistant in assistants">
-        <RouterLink
-          :class="{ active: route.params.code === assistant.code }"
-          class="btn btn-primary"
-          :to="`/assistants/${assistant.code}`"
-          >{{ assistant.name }}</RouterLink
-        >
-      </li>
-      <li v-for="attributeType in Object.values(AttributeType)">
-        <RouterLink
-          class="btn btn-primary"
-          :to="`/attributes/${attributeType}`"
-        >
-          {{ AttributeTypeNames[attributeType] }}
-        </RouterLink>
-      </li>
-    </ul>
+  <div v-if="loadingStatus === LoadingStatus.Loading">
+    <b-spinner variant="primary"></b-spinner>
   </div>
-  <RouterView></RouterView>
+  <template v-else-if="loadingStatus === LoadingStatus.Resolved">
+    <div class="menu" style="margin: 20px">
+      <input
+        type="checkbox"
+        ref="menu"
+        id="burger-checkbox"
+        class="burger-checkbox"
+      />
+      <label for="burger-checkbox" class="burger"></label>
+      <ul class="menu-list">
+        <li>
+          <RouterLink
+            class="btn btn-primary"
+            to="/assistants"
+            @click.native="handleBlur"
+          >
+            Асистенты
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink
+            class="btn btn-primary"
+            to="/characters"
+            @click.native="handleBlur"
+          >
+            Характеры
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink
+            class="btn btn-primary"
+            to="/attributes"
+            @click.native="handleBlur"
+          >
+            Атрибуты
+          </RouterLink>
+        </li>
+      </ul>
+    </div>
+    {{ props }}
+    <br />
+    <br />
+    {{ prop }}
+    <RouterView></RouterView>
+  </template>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
-import { Response } from "./types/response";
-import { Assistant } from "./types/assistant";
-import { baseApiUrl } from "./config";
-import { AttributeType, AttributeTypeNames } from "./types/attributes";
+import { useTemplateRef } from "vue";
+import { ref, onMounted } from "vue";
+import { LoadingStatus } from "./types/loading-status.ts";
 
-const assistants = ref<Assistant[]>([]);
-const route = useRoute();
+const checkbox = useTemplateRef<HTMLInputElement>("menu");
+
+const loadingStatus = ref(LoadingStatus.Loading);
+const props = ref([]);
+const prop = ref();
 
 onMounted(async () => {
-  const response = await fetch(`${baseApiUrl}/admin/assistants`);
-  const data: Response<Assistant[]> = await response.json();
+  try {
+    const response = await fetch(
+      "http://localhost:3007/admin/personality/props"
+    );
 
-  assistants.value = data.data;
+    if (response.ok) {
+      const json = await response.json();
+      props.value = json.data.map(({ prop_type }) => prop_type);
+      loadingStatus.value = LoadingStatus.Resolved;
+
+      const response2 = await fetch(
+        `http://localhost:3007/admin/personality/props/lexis`
+      );
+      const json2 = await response2.json();
+      prop.value = json2.data;
+
+      
+    } else {
+      loadingStatus.value = LoadingStatus.Rejected;
+    }
+  } catch {
+    loadingStatus.value = LoadingStatus.Rejected;
+  }
 });
+
+const handleBlur = () => {
+  if (checkbox.value) {
+    checkbox.value.checked = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -53,6 +103,7 @@ onMounted(async () => {
   background: rgb(35, 84, 141);
   border: none;
 }
+
 .btn-check:checked + .btn,
 :not(.btn-check) + .btn:active,
 .btn:first-child:active,
@@ -63,6 +114,7 @@ onMounted(async () => {
   border-radius: 0;
   font-size: large;
 }
+
 .burger-checkbox {
   position: absolute;
   visibility: hidden;
@@ -108,6 +160,7 @@ onMounted(async () => {
 .burger-checkbox:checked + .burger::after {
   background: #fff;
 }
+
 .burger-checkbox:checked + .burger::before {
   top: 11px;
   transform: rotate(45deg);
