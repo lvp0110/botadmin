@@ -12,10 +12,10 @@
     </label>
     <div v-for="(field, index) in fields" :key="field.key">
       <label class="label">
-        <span>{{ field.value.type.name }}</span>
+        <span>{{ field.value.type }}</span>
         <PropSelect
-          :name="`props[${index}].data`"
-          :options="propItemsOptions[field.value.type.type]"
+          :name="`prop_list[${index}].data`"
+          :options="propItemsOptions[field.value.type]"
         />
       </label>
     </div>
@@ -36,7 +36,7 @@ const { initialValues, propItemsOptions, onSubmit } = defineProps<{
   onSubmit: (personality: Personality) => void;
 }>();
 
-const { defineField, errors, values, handleSubmit } = useForm({
+const { defineField, errors, handleSubmit } = useForm({
   initialValues,
   validationSchema: {
     name: (value: string = "") =>
@@ -44,14 +44,10 @@ const { defineField, errors, values, handleSubmit } = useForm({
   },
 });
 
-watch(values, (values) => {
-  console.log(values);
-});
-
 const [code, codeAttributes] = defineField("code");
 const [name, nameAttributes] = defineField("name");
 
-const { fields } = useFieldArray<Personality["props"][number]>("props");
+const { fields } = useFieldArray<Personality["prop_list"][number]>("prop_list");
 
 const submit = handleSubmit((values) => {
   onSubmit(values);

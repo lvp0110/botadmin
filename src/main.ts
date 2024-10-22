@@ -17,6 +17,7 @@ import PersonalityPage from './pages/personality/index.vue'
 import PersonalityNewPage from './pages/personality/new/index.vue'
 import PersonalityCodePage from './pages/personality/code/index.vue'
 import PersonalityCodeEditPage from './pages/personality/code/edit/index.vue'
+import { propsStore } from "./store/props-store";
 
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -82,4 +83,4 @@ const router = createRouter({
 
 Vue.use(BootstrapVue);
 
-createApp(App).use(router).mount("#app");
+createApp(App).use(router).use(propsStore).mount("#app");

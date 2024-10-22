@@ -3,31 +3,28 @@
     >Добавить характер</RouterLink
   >
   <ul>
-    <li v-for="character in personalities">
-      <RouterLink :to="`/personality/${character.name}`">{{
-        character.name
+    <li v-for="personality in personalities">
+      <RouterLink :to="`/personality/${personality.code}`">{{
+        personality.name
       }}</RouterLink>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-import { PersonalityFormData } from "../../types/personality";
+import { onMounted, ref } from "vue";
+import { PersonalityPreview, PersonalityPreviewResponse } from "../../types/personality";
 
-const personalities: PersonalityFormData[] = [
-  {
-    name: "characher 1",
-  },
-  {
-    name: "characher 2",
-  },
-  {
-    name: "characher 3",
-  },
-  {
-    name: "characher 4",
-  },
-];
+const personalities = ref<PersonalityPreview[]>([])
+
+onMounted(async () => {
+      const response = await fetch(
+        `http://localhost:3007/admin/personality`
+      );
+      const json: PersonalityPreviewResponse = await response.json();
+
+      personalities.value = json.data.items
+})
 </script>
 
 <style scoped></style>

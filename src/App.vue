@@ -55,35 +55,34 @@ import { LoadingStatus } from "./types/loading-status.ts";
 
 const checkbox = useTemplateRef<HTMLInputElement>("menu");
 
-const loadingStatus = ref(LoadingStatus.Loading);
+const loadingStatus = ref(LoadingStatus.Resolved);
 const props = ref([]);
-const prop = ref();
 
 onMounted(async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:3007/admin/personality/props"
-    );
+  // try {
+  //   const response = await fetch(
+  //     "http://localhost:3007/admin/personality/props"
+  //   );
 
-    if (response.ok) {
-      const json = await response.json();
-      // props.value = json.data.map(({ prop_type }) => prop_type);
-      loadingStatus.value = LoadingStatus.Resolved;
+  //   if (response.ok) {
+  //     const json = await response.json();
+  //     // props.value = json.data.map(({ prop_type }) => prop_type);
+  //     loadingStatus.value = LoadingStatus.Resolved;
 
-      // const response2 = await fetch(
-      //   `http://localhost:3007/admin/personality/props/lexis`
-      // );
-      // const json2 = await response2.json();
-      // prop.value = json2.data;
+  //     // const response2 = await fetch(
+  //     //   `http://localhost:3007/admin/personality/props/lexis`
+  //     // );
+  //     // const json2 = await response2.json();
+  //     // prop.value = json2.data;
 
       
-    } else {
-      // loadingStatus.value = LoadingStatus.Rejected;
-      loadingStatus.value = LoadingStatus.Resolved;
-    }
-  } catch {
-    loadingStatus.value = LoadingStatus.Resolved;
-  }
+  //   } else {
+  //     // loadingStatus.value = LoadingStatus.Rejected;
+  //     loadingStatus.value = LoadingStatus.Resolved;
+  //   }
+  // } catch {
+  //   loadingStatus.value = LoadingStatus.Resolved;
+  // }
 });
 
 const handleBlur = () => {

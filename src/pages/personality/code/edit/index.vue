@@ -1,41 +1,43 @@
 <template>
   <CharactersForm
+    v-if="personality"
     :initial-values="personality"
-    :prop-items-options="propItemsOptions"
+    :prop-items-options="{}"
     :on-submit="handleSubmit"
   />
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import CharactersForm from "../../../../components/personality-form/index.vue";
 import { Personality } from "../../../../types/personality";
 import { PropItem } from "../../../../types/props";
 
-const personality: Personality = {
-  code: "test code",
-  name: "test name",
-  props: [
-    {
-      type: { name: "Лексика", type: "lexis" },
-      data: { code: "prop 1", name: "prop 1", prompt: "prompt lexis..." },
-    },
-    {
-      type: { name: "Тон", type: "tone" },
-      data: { code: "prop 2", name: "prop 2", prompt: "prompt tone..." },
-    },
-  ],
-};
+const route = useRoute();
 
-const propItemsOptions: Record<string, PropItem[]> = {
-  lexis: [
-    { code: "prop 1", name: "prop 1", prompt: "prompt lexis..." },
-    { code: "prop 2", name: "prop 2", prompt: "prompt lexis..." },
-  ],
-  tone: [
-    { code: "prop 1", name: "prop 1", prompt: "prompt tone..." },
-    { code: "prop 2", name: "prop 2", prompt: "prompt tone..." },
-  ],
-};
+const props = ref<PropItem[]>([]);
+const personality = ref<Personality>();
+
+onMounted(async () => {
+  const response = await fetch("http://localhost:3007/admin/personality/props/lexis");
+
+  const json = await response.json();
+
+  console.log(json);
+
+  props.value = json.data;
+});
+
+onMounted(async () => {
+  const response = await fetch(
+    `http://localhost:3007/admin/personality/${route.params.code}`
+  );
+
+  const json = await response.json();
+
+  personality.value = json.data;
+});
 
 const handleSubmit = (personality: Personality) => {
   console.log(personality);

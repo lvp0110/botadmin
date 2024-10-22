@@ -1,4 +1,4 @@
-import { Prop, PropItem } from "./props";
+import { PropType, PropItem } from "./props";
 
 export type PersonalityCode = string;
 
@@ -11,14 +11,26 @@ export interface PersonalityFormData {
 }
 
 export interface PersonalityItem {
-  type: Prop;
+  type: PropType;
   data: PropItem;
 }
 
 export interface Personality {
   name: string;
   code: PersonalityCode;
-  props: PersonalityItem[];
+  prop_list: PersonalityItem[];
+}
+
+export interface PersonalityPreviewResponse {
+  data: {
+    name: string
+    items: PersonalityPreview[]
+  }
+}
+
+export interface PersonalityPreview {
+  name: string;
+  code: PersonalityCode;
 }
 
 /*
